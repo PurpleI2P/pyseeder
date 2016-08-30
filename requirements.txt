@@ -1,0 +1,6 @@
+cffi==1.7.0
+cryptography==1.4
+idna==2.1
+pyasn1==0.1.9
+pycparser==2.14
+six==1.10.0

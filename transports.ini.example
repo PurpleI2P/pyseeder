@@ -1,0 +1,10 @@
+[transports]
+; enabled transports separated by space
+enabled=git
+
+[git]
+; Folder with git repository to use
+folder=/home/user/reseed-data-repo
+
+[dropbox]
+; todo
