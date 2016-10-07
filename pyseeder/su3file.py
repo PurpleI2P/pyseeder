@@ -1,4 +1,4 @@
-import os, os.path
+import os
 import time, datetime
 import random 
 import io
@@ -27,9 +27,6 @@ class SU3File:
 
     def write(self, filename, priv_key, priv_key_password):
         """Write file to disc"""
-        if not os.access(os.path.dirname(filename) or ".", os.W_OK):
-            raise PyseederException("Can't write su3 file, access forbidden")
-
         nullbyte = bytes([0])
         with open(filename, "wb") as f:
             f.write("I2Psu3".encode("utf-8"))
@@ -58,12 +55,6 @@ class SU3File:
         zip_file = io.BytesIO()
         dat_files = []
 
-        if not os.path.exists(netdb):
-            raise PyseederException("Wrong netDb path")
-
-        if not os.access(netdb, os.R_OK):
-            raise PyseederException("Can't read netDb, access forbidden")
-
         for root, dirs, files in os.walk(netdb):
             for f in files:
                 if f.endswith(".dat"):
@@ -71,11 +62,13 @@ class SU3File:
                     # may be not older than 10h
                     dat_files.append(os.path.join(root, f))
 
-        if len(dat_files) < 100:
-            raise PyseederException("Can't get enough netDb entries. Wrong netDb path?")
+        if len(dat_files) == 0:
+            raise PyseederException("Can't get enough netDb entries")
+        elif len(dat_files) > 75:
+            dat_files = random.sample(dat_files, 75)
 
         with ZipFile(zip_file, "w", compression=ZIP_DEFLATED) as zf:
-            for f in random.sample(dat_files, 75): 
+            for f in dat_files: 
                 zf.write(f, arcname=os.path.split(f)[1])
 
         self.FILE_TYPE = 0x00

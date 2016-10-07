@@ -1,7 +1,7 @@
 """Module for managing transport tasks"""
 import urllib.request
 from urllib.error import URLError
-import os, os.path
+import os
 import importlib
 
 from pyseeder.utils import PyseederException

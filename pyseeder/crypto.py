@@ -1,4 +1,4 @@
-import os, os.path
+import os
 import random 
 import sys
 import datetime
@@ -15,10 +15,6 @@ from cryptography.hazmat.primitives.asymmetric import padding
 
 def keygen(pub_key, priv_key, priv_key_password, user_id):
     """Generate new private key and certificate RSA_SHA512_4096"""
-    for f in [pub_key, priv_key]:
-        if not os.access(os.path.dirname(f) or ".", os.W_OK):
-            raise PyseederException("Can't write {}, access forbidden").format(f)
-
     # Generate our key
     key = rsa.generate_private_key(public_exponent=65537, key_size=4096,
                                             backend=default_backend())
@@ -63,12 +59,6 @@ def keygen(pub_key, priv_key, priv_key_password, user_id):
 
 def append_signature(target_file, priv_key, priv_key_password):
     """Append signature to the end of file"""
-    if not os.path.exists(priv_key):
-        raise PyseederException("Wrong private key path")
-
-    if not os.access(priv_key, os.R_OK):
-        raise PyseederException("Can't read private key, access forbidden")
-
     with open(target_file, "rb") as f:
         contents = f.read()
 

@@ -1,6 +1,6 @@
 """Git transport plugin"""
 import subprocess
-import os, os.path
+import os
 from shutil import copyfile
 from pyseeder.utils import TransportException
 
