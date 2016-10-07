@@ -7,17 +7,13 @@ Reseed data managment tools for I2P
 * Make reseed data files (su3)
 * Download su3 files from official servers for mirroring
 * Upload reseed data to different places (with plugins)
+* Run HTTPS reseed server
 
 Reseed transports are implemented so that users can bootstrap their I2P nodes
 without needing to connect to "official" I2P reseeds. This makes I2P more
 invisible for firewalls.
 
-
-Install requirements
---------------------
-
-    # apt-get install python3 python3-pip
-    # pip3 install -r requirements.txt
+[Installation instructions](INSTALL.md)
 
 
 Usage
@@ -68,3 +64,12 @@ Upload su3 file with pluggable transports
 
 All parameters are optional. Copy file transports.ini.example to 
 transports.ini. Edit your settings in this new file.
+
+
+Run HTTPS reseed server
+-----------------------
+
+    $ python3 pyseeder.py serve --port 8443 --host 127.0.0.1 --private-key data/priv_key.pem --cert data/user_at_mail.i2p.crt --file output/i2pseeds.su3
+
+Note: this server is fine for testing, but for "production" environments please
+use nginx webserver.
