@@ -27,7 +27,7 @@ Generating keypair
 ------------------
 
 
-    $ pyhon3 pyseeder.py keygen --cert data/user_at_mail.i2p.crt --private-key data/priv_key.pem --signer-id user@mail.i2p
+    $ python3 pyseeder.py keygen --cert data/user_at_mail.i2p.crt --private-key data/priv_key.pem --signer-id user@mail.i2p
 
 This will generate certificate (user\_at\_mail.i2p.crt) and private RSA key
 (priv\_key.pem) in data folder. E-mail is used as certificate identifier.
