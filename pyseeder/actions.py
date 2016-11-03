@@ -5,6 +5,9 @@ from pyseeder.utils import PyseederException, check_readable, check_writable
 
 def keygen(args):
     """Sub-command to generate keys"""
+    if not args.cert:
+        args.cert = "data/{}.crt".format(args.signer_id.replace("@", "_at_"))
+
     for f in [args.cert, args.private_key]: check_writable(f)
 
     from pyseeder.crypto import keygen

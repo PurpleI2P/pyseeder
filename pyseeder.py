@@ -23,7 +23,7 @@ def main():
             help="Identifier of certificate (example: user@mail.i2p)")
     kg_parser.add_argument("--private-key", default="data/priv_key.pem",
             help="RSA private key (default: data/priv_key.pem)")
-    kg_parser.add_argument("--cert", required=True, 
+    kg_parser.add_argument("--cert", default=None,
             help="Certificate (example: data/user_at_mail.i2p.crt)")
     kg_parser.set_defaults(func=pyseeder.actions.keygen)
 
