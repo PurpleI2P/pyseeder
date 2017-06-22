@@ -33,8 +33,8 @@ def keygen(pub_key, priv_key, priv_key_password, user_id):
     subject = issuer = x509.Name([
         x509.NameAttribute(NameOID.COUNTRY_NAME, "XX"),
         x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "XX"),
-        x509.NameAttribute(NameOID.LOCALITY_NAME, "XX"),
-        x509.NameAttribute(NameOID.ORGANIZATION_NAME, "I2P Anonymous Network"),
+        x509.NameAttribute(NameOID.LOCALITY_NAME, "I2P Anonymous Network"),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, "XX"),
         x509.NameAttribute(NameOID.ORGANIZATIONAL_UNIT_NAME, "I2P"),
         x509.NameAttribute(NameOID.COMMON_NAME, user_id),
     ])
