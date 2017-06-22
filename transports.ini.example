@@ -1,10 +1,18 @@
 [transports]
 ; enabled transports separated by space
-enabled=git
+enabled=git_publish
 
 [git]
 ; Folder with git repository to use
 folder=/home/user/reseed-data-repo
+
+[git_publish]
+; GENERATE TOKEN for this script here --> https://github.com/settings/tokens
+; Check scope: public_repo (shall be enough)
+GH_USERNAME=user
+GH_TOKEN=your token here
+GH_REPO=user/i2pd-reseed
+GH_TAG=1.0
 
 [dropbox]
 ; todo

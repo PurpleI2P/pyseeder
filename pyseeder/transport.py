@@ -55,4 +55,3 @@ def upload(filename, config):
             except ImportError:
                 raise PyseederException(
                         "{} transport can't be loaded".format(t))
-
