@@ -13,19 +13,23 @@ from cryptography.x509.oid import NameOID
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
-def keygen(pub_key, priv_key, priv_key_password, user_id):
+def keygen(pub_key, priv_key, user_id, priv_key_password=None):
     """Generate new private key and certificate RSA_SHA512_4096"""
     # Generate our key
     key = rsa.generate_private_key(public_exponent=65537, key_size=4096,
                                             backend=default_backend())
+
+    if priv_key_password:
+        ea = serialization.BestAvailableEncryption(priv_key_password)
+    else:
+        ea = serialization.NoEncryption()
 
     # Write our key to disk for safe keeping
     with open(priv_key, "wb") as f:
         f.write(key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.TraditionalOpenSSL,
-            encryption_algorithm=serialization.BestAvailableEncryption(
-                                                            priv_key_password),
+            encryption_algorithm=ea,
         ))
 
     # Various details about who we are. For a self-signed certificate the
@@ -57,7 +61,7 @@ def keygen(pub_key, priv_key, priv_key_password, user_id):
         f.write(cert.public_bytes(serialization.Encoding.PEM))
 
 
-def append_signature(target_file, priv_key, priv_key_password):
+def append_signature(target_file, priv_key, priv_key_password=None):
     """Append signature to the end of file"""
     with open(target_file, "rb") as f:
         contents = f.read()

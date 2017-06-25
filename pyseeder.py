@@ -25,6 +25,8 @@ def main():
             help="RSA private key (default: data/priv_key.pem)")
     kg_parser.add_argument("--cert", default=None,
             help="Certificate (example: data/user_at_mail.i2p.crt)")
+    kg_parser.add_argument("--no-encryption", action="store_true",
+            help="Disable private key encryption")
     kg_parser.set_defaults(func=pyseeder.actions.keygen)
 
 
@@ -44,6 +46,8 @@ echo $YOUR_PASSWORD | %(prog)s --netdb /path/to/netDb \\
             help="Output file (default: output/i2pseeds.su3)")
     rs_parser.add_argument("--netdb", required=True, 
             help="Path to netDb folder (example: ~/.i2pd/netDb)")
+    rs_parser.add_argument("--no-encryption", action="store_true",
+            help="Disable private key encryption")
     rs_parser.set_defaults(func=pyseeder.actions.reseed)
 
 

@@ -25,7 +25,7 @@ class SU3File:
         self.VERSION = str(int(time.time())).encode("utf-8")
         #self.keytype = "RSA_SHA512_4096"
 
-    def write(self, filename, priv_key, priv_key_password):
+    def write(self, filename, priv_key, priv_key_password=None):
         """Write file to disc"""
         nullbyte = bytes([0])
         with open(filename, "wb") as f:

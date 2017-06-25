@@ -11,9 +11,14 @@ def keygen(args):
     for f in [args.cert, args.private_key]: check_writable(f)
 
     from pyseeder.crypto import keygen
-    from getpass import getpass
-    priv_key_password = getpass("Set private key password: ").encode("utf-8")
-    keygen(args.cert, args.private_key, priv_key_password, args.signer_id)
+
+    if args.no_encryption:
+        priv_key_password = None
+    else:
+        from getpass import getpass
+        priv_key_password = getpass("Set private key password: ").encode("utf-8")
+
+    keygen(args.cert, args.private_key, args.signer_id, priv_key_password)
 
 def reseed(args):
     """Sub-command to generate reseed file"""
@@ -21,7 +26,12 @@ def reseed(args):
     for f in [args.netdb, args.private_key]: check_readable(f)
 
     from pyseeder.su3file import SU3File
-    priv_key_password = input().encode("utf-8")
+
+    if args.no_encryption:
+        priv_key_password = None
+    else:
+        priv_key_password = input().encode("utf-8")
+
     su3file = SU3File(args.signer_id)
     su3file.reseed(args.netdb)
     su3file.write(args.outfile, args.private_key, priv_key_password)
