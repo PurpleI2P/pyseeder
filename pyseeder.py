@@ -2,13 +2,20 @@
 import os
 import sys
 import argparse
+import logging
 
 import pyseeder.transport
 import pyseeder.actions
 from pyseeder.utils import PyseederException
+
+log = logging.getLogger(__name__)
     
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--loglevel', default=logging.INFO, help="Log level",
+            choices=[logging.CRITICAL, logging.ERROR, logging.WARNING,
+                     logging.INFO, logging.DEBUG])
+
     subparsers = parser.add_subparsers(title="actions",
             help="Command to execute")
 
@@ -101,12 +108,17 @@ echo $YOUR_PASSWORD | %(prog)s --netdb /path/to/netDb \\
             help=".su3 file (default: output/i2pseeds.su3)")
     serve_parser.set_defaults(func=pyseeder.actions.serve)
 
+
     args = parser.parse_args()
+
+    logging.basicConfig(level=args.loglevel, 
+            format='%(levelname)-8s %(message)s')
+
     if hasattr(args, "func"):
         try:
             args.func(args)
         except PyseederException as pe:
-            print("Pyseeder error: {}".format(pe))
+            log.critical("Pyseeder error: {}".format(pe))
             sys.exit(1)
     else:
         parser.print_help()
