@@ -3,9 +3,11 @@ import urllib.request
 from urllib.error import URLError
 import os
 import importlib
+import logging
 
-from pyseeder.utils import PyseederException
+from pyseeder.utils import PyseederException, TransportException
 
+log = logging.getLogger(__name__)
 
 RESEED_URLS = [
     "https://reseed.i2p-projekt.de/",
@@ -55,4 +57,6 @@ def upload(filename, config):
             except ImportError:
                 raise PyseederException(
                         "{} transport can't be loaded".format(t))
+            except TransportException as e:
+                log.error("Transport error: {}".format(e))
 

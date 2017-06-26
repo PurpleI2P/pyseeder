@@ -1,6 +1,6 @@
 [transports]
 ; enabled transports separated by space
-enabled=git
+enabled=github
 
 [git]
 ; Folder with git repository to use
@@ -8,3 +8,15 @@ folder=/home/user/reseed-data-repo
 
 [dropbox]
 ; todo
+
+[github]
+; GitHub username
+username=username
+; GitHub API token
+; Generate token for this script here --> https://github.com/settings/tokens
+; Check scope: public_repo (shall be enough)
+token=token
+; Repository
+repo=username/repo-name
+; Repository tag to which asset is being uploaded
+release_tag=v1.0
