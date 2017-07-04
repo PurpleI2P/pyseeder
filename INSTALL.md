@@ -1,7 +1,8 @@
 Installation
 ============
 
-Requirements: python3 and python cryptography package
+Requirements: python3 and python cryptography package, requests for transports
+
 
 Example for Ubuntu/Debian
 -------------------------
@@ -22,7 +23,7 @@ Configure new python virtual environment:
     cd pyseeder
     virtualenv --python=python3 venv
     . venv/bin/activate
-    pip3 install -r requirements.txt
+    pip3 install .
 
 
 Thats it! Next time you will need to run pyseeder, don't forget to activate 
