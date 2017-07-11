@@ -17,12 +17,13 @@ RUN apk --no-cache add python3 py3-pip build-base git openssl-dev musl-dev pytho
 RUN apk --no-cache add python3 openssl
 
 VOLUME "$DATA_DIR"
-USER pyseeder
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod a+x /entrypoint.sh
 
 EXPOSE 8443
+
+USER pyseeder
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
