@@ -1,6 +1,7 @@
 import http.server
 import urllib.parse
 import ssl
+import os
 
 class ReseedHandler(http.server.SimpleHTTPRequestHandler):
     """Handles reseeding requests"""
@@ -13,6 +14,8 @@ class ReseedHandler(http.server.SimpleHTTPRequestHandler):
         if path == "/i2pseeds.su3":
             self.send_response(200)
             self.send_header("Content-Type", "application/octet-stream")
+            self.send_header("Content-Length", 
+                    os.path.getsize(self.i2pseeds_file))
             self.end_headers()
             with open(self.i2pseeds_file, 'rb') as f:
                 self.wfile.write(f.read())
