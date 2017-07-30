@@ -16,6 +16,8 @@ RUN apk --no-cache add python3 py3-pip build-base git openssl-dev musl-dev pytho
 # 2. Adding required libraries to run i2pd to ensure it will run.
 RUN apk --no-cache add python3 openssl
 
+RUN mkdir /netDb
+
 VOLUME "$DATA_DIR"
 
 COPY entrypoint.sh /entrypoint.sh
