@@ -6,11 +6,11 @@ from pyseeder.utils import TransportException
 
 TRANSPORT_NAME = "git"
 
-# Push to github repo witout prompting password. 
+# Push to github repo witout prompting password.
 # Set up SSH keys or change origin URL like that:
 # git remote set-url origin https://$USERNAME:$PASSWORD@github.com/$USERNAME/$REPO.git
 
-def run(filename, config): 
+def run(filename, config):
     if "folder" not in config:
         raise TransportException("git: No folder specified in config")
     else:
@@ -28,7 +28,7 @@ def run(filename, config):
     copyfile(filename, os.path.join(REPO_FOLDER, REPO_FILE))
 
     commands = [
-        "git add {}".format(REPO_FILE), 
+        "git add {}".format(REPO_FILE),
         "git commit -m 'update'",
         "git push origin master"
     ]

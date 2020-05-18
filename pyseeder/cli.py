@@ -9,7 +9,7 @@ import pyseeder.actions
 from pyseeder.utils import PyseederException
 
 log = logging.getLogger(__name__)
-    
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--loglevel', default=logging.INFO, help="Log level",
@@ -24,7 +24,7 @@ def main():
         description="Generates keypair for your reseed",
         usage="""
 %(prog)s --cert data/user_at_mail.i2p.crt \\
-        --private-key data/priv_key.pem --signer-id user@mail.i2p""" 
+        --private-key data/priv_key.pem --signer-id user@mail.i2p"""
     )
     kg_parser.add_argument("--signer-id", required=True,
             help="Identifier of certificate (example: user@mail.i2p)")
@@ -45,13 +45,13 @@ echo $YOUR_PASSWORD | %(prog)s --netdb /path/to/netDb \\
         --private-key data/priv_key.pem --outfile output/i2pseeds.su3 \\
         --signer-id user@mail.i2p"""
     )
-    rs_parser.add_argument("--signer-id", required=True, 
+    rs_parser.add_argument("--signer-id", required=True,
             help="Identifier of certificate (example: user@mail.i2p)")
     rs_parser.add_argument("--private-key", default="data/priv_key.pem",
             help="RSA private key (default: data/priv_key.pem)")
     rs_parser.add_argument("-o", "--outfile", default="output/i2pseeds.su3",
             help="Output file (default: output/i2pseeds.su3)")
-    rs_parser.add_argument("--netdb", required=True, 
+    rs_parser.add_argument("--netdb", required=True,
             help="Path to netDb folder (example: ~/.i2pd/netDb)")
     rs_parser.add_argument("--no-encryption", action="store_true",
             help="Disable private key encryption")
@@ -102,7 +102,7 @@ echo $YOUR_PASSWORD | %(prog)s --netdb /path/to/netDb \\
             help="Port listening for clients (default: 8443)")
     serve_parser.add_argument("--private-key", default="data/priv_key.pem",
             help="RSA private key (default: data/priv_key.pem)")
-    serve_parser.add_argument("--cert", required=True, 
+    serve_parser.add_argument("--cert", required=True,
             help="Certificate (example: data/user_at_mail.i2p.crt)")
     serve_parser.add_argument("-f", "--file", default="output/i2pseeds.su3",
             help=".su3 file (default: output/i2pseeds.su3)")
@@ -111,7 +111,7 @@ echo $YOUR_PASSWORD | %(prog)s --netdb /path/to/netDb \\
 
     args = parser.parse_args()
 
-    logging.basicConfig(level=args.loglevel, 
+    logging.basicConfig(level=args.loglevel,
             format='%(levelname)-8s %(message)s')
 
     if hasattr(args, "func"):

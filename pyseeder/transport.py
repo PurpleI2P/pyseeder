@@ -12,14 +12,13 @@ log = logging.getLogger(__name__)
 RESEED_URLS = [
     "https://reseed.i2p-projekt.de/",
     "https://i2p.mooo.com/netDb/",
-    "https://netdb.i2p2.no/",
-    "https://us.reseed.i2p2.no:444/",       
-    "https://uk.reseed.i2p2.no:444/",
-    "https://i2p.manas.ca:8443/",
-    "https://i2p-0.manas.ca:8443/",
-    "https://reseed.i2p.vzaws.com:8443/",
-    "https://user.mx24.eu/",
-    "https://download.xxlspeed.com/",
+    "https://reseed.i2p2.no/",
+    "https://reseed-fr.i2pd.xyz/",
+    "https://reseed.memcpy.io/",
+    "https://reseed.onion.im/",
+    "https://i2pseed.creativecowpat.net:8443/",
+    "https://reseed.i2pgit.org/",
+    "https://i2p.novg.net/",
 ]
 
 def download(url, filename):

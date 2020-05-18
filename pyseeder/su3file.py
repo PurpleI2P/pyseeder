@@ -1,6 +1,6 @@
 import os
 import time, datetime
-import random 
+import random
 import io
 
 from zipfile import ZipFile, ZIP_DEFLATED
@@ -68,7 +68,7 @@ class SU3File:
             dat_files = random.sample(dat_files, 75)
 
         with ZipFile(zip_file, "w", compression=ZIP_DEFLATED) as zf:
-            for f in dat_files: 
+            for f in dat_files:
                 zf.write(f, arcname=os.path.split(f)[1])
 
         self.FILE_TYPE = 0x00

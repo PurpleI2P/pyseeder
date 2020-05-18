@@ -34,14 +34,14 @@ def run(filename, config):
             r = requests.delete(x["url"], auth=creds)
             if r.status_code is not 204:
                 raise TransportException("Failed to delete asset from GitHub")
-            
+
     # upload new asset
     upload_url = resp.json()["upload_url"].split("{")[0] # wat
     headers = {'Content-Type': content_type}
     params = {'name': asset_name}
 
     data = open(filename, 'rb').read()
-    r = requests.post(upload_url, headers=headers, params=params, auth=creds, 
+    r = requests.post(upload_url, headers=headers, params=params, auth=creds,
             data=data)
 
     if r.status_code is not 201:

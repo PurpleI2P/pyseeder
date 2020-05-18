@@ -1,4 +1,6 @@
 __pycache__
 *.pyc
+build/
+pyseeder.egg-info/
 venv/
 transports.ini
