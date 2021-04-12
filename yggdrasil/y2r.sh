@@ -178,7 +178,7 @@ echo -e   "==========================================================="
 echo -e "\nstarted:  $timestart\nfinished: $(date '+%Y-%m-%d %H:%M:%S')"
 echo -e "total routers: $count"
 echo -e "reseed build:  $(($yggaddr+$realpadding)) ($yggaddr/$realpadding)\n"
-echo -e "Yggdrasil I2P reseed creator (c) GPLv3, acetone, 2021\n"
+echo -e "Yggdrasil I2P reseed creator | acetone, 2021\n"
 
 # Update web page
 
