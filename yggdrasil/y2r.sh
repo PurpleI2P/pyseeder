@@ -110,13 +110,12 @@ rm $success
 echo -e   "==========================================================="
 
 echo -e "Reseed building..."
-yggvolume=$(($yggaddr / 100 * 70)) # 70% ресида - Ygg-роутеры.
 echo -n "Need "
-if [[ $yggvolume < $minimum ]]; then # Если их меньше minimum, докладываем 25 роутеров обычных
+if [[ $yggvolume < $minimum ]]; then # Если ygg-роутеров меньше minimum, докладываем 25 обычных роутеров
     echo -n "25 "
     paddingcount=25
 else
-    paddingcount=$(($yggaddr / 100 * 30))
+    paddingcount=$(($yggaddr / 10 * 3))
     echo -n "$paddingcount "
 fi
 echo "regular routers"
