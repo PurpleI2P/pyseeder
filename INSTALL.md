@@ -18,7 +18,7 @@ Clone repo:
     git clone https://github.com/PurpleI2P/pyseeder.git
 
 
-Configure new python virtual environment:
+Configure new python virtual environment (N.B. SAFETY WARNINGS: NEVER DO THIS UNDER THE OS `root` USER! AND NEVER RUN `pip*` UNDER THE OS `root` USER!):
 
     cd pyseeder
     virtualenv --python=python3 venv
