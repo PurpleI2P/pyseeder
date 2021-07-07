@@ -55,6 +55,8 @@ echo $YOUR_PASSWORD | %(prog)s --netdb /path/to/netDb \\
             help="Path to netDb folder (example: ~/.i2pd/netDb)")
     rs_parser.add_argument("--no-encryption", action="store_true",
             help="Disable private key encryption")
+    rs_parser.add_argument("--yggseeds", type=int, default=0,
+            help="Amount of yggdrasil seeds to include to reseed")
     rs_parser.set_defaults(func=pyseeder.actions.reseed)
 
 

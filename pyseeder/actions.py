@@ -33,7 +33,7 @@ def reseed(args):
         priv_key_password = input().encode("utf-8")
 
     su3file = SU3File(args.signer_id)
-    su3file.reseed(args.netdb)
+    su3file.reseed(args.netdb, args.yggseeds)
     su3file.write(args.outfile, args.private_key, priv_key_password)
 
 def transport_pull(args):

@@ -50,22 +50,52 @@ class SU3File:
 
         pyseeder.crypto.append_signature(filename, priv_key, priv_key_password)
 
-    def reseed(self, netdb):
+    def reseed(self, netdb, yggseeds):
         """Compress netdb entries and set content"""
+        seeds = 75
         zip_file = io.BytesIO()
         dat_files = []
+        dat_yggfiles = []
+
+        if yggseeds > 0:
+            import re
+            pattern = re.compile(b'host=.[23]..:')
+
+        timelimit = time.time() - float(3600 * 10) # current time minus 10 hours
 
         for root, dirs, files in os.walk(netdb):
             for f in files:
                 if f.endswith(".dat"):
-                    # TODO check modified time
-                    # may be not older than 10h
-                    dat_files.append(os.path.join(root, f))
+                    path = os.path.join(root, f)
+                    file_added = False
+
+                    if os.path.getmtime(path) < timelimit: # modified time older than 10h
+                        continue
+
+                    if yggseeds > 0:
+                        for line in open(path, "rb"):
+                            if pattern.search(line):
+                                dat_yggfiles.append(path)
+                                file_added = True
+                                break
+
+                    if not file_added:
+                        dat_files.append(path)
+
+
+        if yggseeds > 0:
+            if len(dat_yggfiles) == 0:
+                raise PyseederException("Can't get enough netDb entries with yggdrasil addresses")
+            elif len(dat_yggfiles) > yggseeds:
+                dat_yggfiles = random.sample(dat_yggfiles, yggseeds)
+            seeds = seeds - len(dat_yggfiles)
 
         if len(dat_files) == 0:
             raise PyseederException("Can't get enough netDb entries")
-        elif len(dat_files) > 75:
-            dat_files = random.sample(dat_files, 75)
+        elif len(dat_files) > seeds:
+            dat_files = random.sample(dat_files, seeds)
+
+        dat_files.extend(dat_yggfiles)
 
         with ZipFile(zip_file, "w", compression=ZIP_DEFLATED) as zf:
             for f in dat_files:
