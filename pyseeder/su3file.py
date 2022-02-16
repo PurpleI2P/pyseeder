@@ -49,14 +49,7 @@ class SU3File:
         self.OUTPUT += self.SIGNER_ID.encode("utf-8")
         self.OUTPUT += self.CONTENT
 
-        with open(filename + "-data", "wb") as f:
-           f.write(self.OUTPUT)
-
         signature = pyseeder.crypto.get_signature(self.OUTPUT, priv_key, priv_key_password)
-
-        with open(filename + "-sig", "wb") as f:
-           f.write(signature)
-
         self.OUTPUT += signature
 
         with open(filename, "wb") as f:
