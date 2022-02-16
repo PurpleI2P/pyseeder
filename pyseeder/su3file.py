@@ -24,31 +24,43 @@ class SU3File:
         self.CONTENT_LENGTH = None
         self.VERSION = str(int(time.time())).encode("utf-8")
         #self.keytype = "RSA_SHA512_4096"
+        self.OUTPUT = None
 
     def write(self, filename, priv_key, priv_key_password=None):
         """Write file to disc"""
         nullbyte = bytes([0])
-        with open(filename, "wb") as f:
-            f.write("I2Psu3".encode("utf-8"))
-            f.write(bytes([0,0]))
-            f.write(self.SIGNATURE_TYPE.to_bytes(2, "big"))
-            f.write(self.SIGNATURE_LENGTH.to_bytes(2, "big"))
-            f.write(nullbyte)
-            f.write(bytes([self.VERSION_LENGTH]))
-            f.write(nullbyte)
-            f.write(bytes([self.SIGNER_ID_LENGTH]))
-            f.write(self.CONTENT_LENGTH.to_bytes(8, "big"))
-            f.write(nullbyte)
-            f.write(bytes([self.FILE_TYPE]))
-            f.write(nullbyte)
-            f.write(bytes([self.CONTENT_TYPE]))
-            f.write(bytes([0 for _ in range(12)]))
-            f.write(self.VERSION + bytes(
-                [0 for _ in range(16 - len(self.VERSION))]))
-            f.write(self.SIGNER_ID.encode("utf-8"))
-            f.write(self.CONTENT)
 
-        pyseeder.crypto.append_signature(filename, priv_key, priv_key_password)
+        self.OUTPUT = "I2Psu3".encode("utf-8")
+        self.OUTPUT += bytes([0,0])
+        self.OUTPUT += self.SIGNATURE_TYPE.to_bytes(2, "big")
+        self.OUTPUT += self.SIGNATURE_LENGTH.to_bytes(2, "big")
+        self.OUTPUT += nullbyte
+        self.OUTPUT += bytes([self.VERSION_LENGTH])
+        self.OUTPUT += nullbyte
+        self.OUTPUT += bytes([self.SIGNER_ID_LENGTH])
+        self.OUTPUT += self.CONTENT_LENGTH.to_bytes(8, "big")
+        self.OUTPUT += nullbyte
+        self.OUTPUT += bytes([self.FILE_TYPE])
+        self.OUTPUT += nullbyte
+        self.OUTPUT += bytes([self.CONTENT_TYPE])
+        self.OUTPUT += bytes([0 for _ in range(12)])
+        self.OUTPUT += self.VERSION + bytes(
+            [0 for _ in range(16 - len(self.VERSION))])
+        self.OUTPUT += self.SIGNER_ID.encode("utf-8")
+        self.OUTPUT += self.CONTENT
+
+        with open(filename + "-data", "wb") as f:
+           f.write(self.OUTPUT)
+
+        signature = pyseeder.crypto.get_signature(self.OUTPUT, priv_key, priv_key_password)
+
+        with open(filename + "-sig", "wb") as f:
+           f.write(signature)
+
+        self.OUTPUT += signature
+
+        with open(filename, "wb") as f:
+           f.write(self.OUTPUT)
 
     def reseed(self, netdb, yggseeds):
         """Compress netdb entries and set content"""

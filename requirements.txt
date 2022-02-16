@@ -1,2 +1,3 @@
 cryptography>=1.4
+rsa
 requests

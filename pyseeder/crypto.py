@@ -61,16 +61,30 @@ def keygen(pub_key, priv_key, user_id, priv_key_password=None):
         f.write(cert.public_bytes(serialization.Encoding.PEM))
 
 
-def append_signature(target_file, priv_key, priv_key_password=None):
-    """Append signature to the end of file"""
-    with open(target_file, "rb") as f:
-        contents = f.read()
+def get_signature(contents, priv_key, priv_key_password=None):
+    """Calculate signature for prepared reseed file"""
+    """Singing with NoneWithRSA algorithm: https://stackoverflow.com/a/68301530"""
+    import rsa as pyrsa
 
     with open(priv_key, "rb") as kf:
-        private_key = serialization.load_pem_private_key(
-            kf.read(), password=priv_key_password, backend=default_backend())
+        pk = pyrsa.PrivateKey.load_pkcs1(
+            serialization.load_pem_private_key(
+                kf.read(), password=priv_key_password, backend=default_backend()
+            ).private_bytes(
+                serialization.Encoding.PEM,
+                serialization.PrivateFormat.TraditionalOpenSSL,
+                serialization.NoEncryption()
+            )
+        )
 
-    signature = private_key.sign(contents, padding.PKCS1v15(), hashes.SHA512())
+    digest = hashes.Hash(hashes.SHA512())
+    digest.update(contents)
+    h = digest.finalize()
 
-    with open(target_file, "ab") as f:
-        f.write(signature)
+    keylength = pyrsa.pkcs1.common.byte_size(pk.n)
+    padded = pyrsa.pkcs1._pad_for_signing(h, keylength)
+    payload = pyrsa.pkcs1.transform.bytes2int(padded)
+    encrypted = pk.blinded_encrypt(payload)
+    sig = pyrsa.pkcs1.transform.int2bytes(encrypted, keylength)
+
+    return sig

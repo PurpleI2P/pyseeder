@@ -21,22 +21,28 @@ def run(filename, config):
 
     # get release info
     try:
-        resp = requests.get(release_info_url, auth=creds)
+        release = requests.get(release_info_url, auth=creds)
     except:
         raise TransportException("Failed to connect to GitHub API")
 
-    if resp.status_code is not 200:
+    if release.status_code is not 200:
         raise TransportException("Check your GitHub API auth settings")
 
+    # fetch release assets
+    try:
+        assets = requests.get(release.json()["assets_url"], auth=creds)
+    except:
+        raise TransportException("Unable get release assets")
+
     # delete old asset
-    for x in resp.json()["assets"]:
+    for x in assets.json():
         if x["name"] == asset_name:
             r = requests.delete(x["url"], auth=creds)
             if r.status_code is not 204:
                 raise TransportException("Failed to delete asset from GitHub")
 
     # upload new asset
-    upload_url = resp.json()["upload_url"].split("{")[0] # wat
+    upload_url = release.json()["upload_url"].split("{")[0] # wat
     headers = {'Content-Type': content_type}
     params = {'name': asset_name}
 
@@ -45,5 +51,5 @@ def run(filename, config):
             data=data)
 
     if r.status_code is not 201:
-        raise TransportException("Failed to upload asset to GitHub API")
+        raise TransportException("Failed to upload asset to GitHub API : code %d" % (r.status_code))
 
