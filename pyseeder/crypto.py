@@ -77,7 +77,7 @@ def get_signature(contents, priv_key, priv_key_password=None):
             )
         )
 
-    digest = hashes.Hash(hashes.SHA512())
+    digest = hashes.Hash(hashes.SHA512(), default_backend())
     digest.update(contents)
     h = digest.finalize()
 
