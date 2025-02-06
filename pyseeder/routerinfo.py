@@ -1,11 +1,14 @@
 class RouterInfo:
     
     def __init__(self, filename):
+        self.yggdrasil = False
         with open(filename, 'rb') as f:
             buf = f.read()
-            if len(buf) < 391: # TODO: parse identity
+            if len(buf) < 387:
                 return 
-            offset = 391
+            offset = 384 # crypto and signing keys
+            offset += int.from_bytes(buf[offset + 1: offset + 3], byteorder='big') # size from certificate 
+            offset += 3 # certificate
             self.timestamp = int.from_bytes(buf[offset: offset + 8], byteorder='big') # 8 bytes timestamp
             offset += 8
             offset += self.readaddresses(buf[offset:]) # addresses
@@ -19,9 +22,25 @@ class RouterInfo:
         for i in range(0, numaddresses):
             offset += 1 # cost
             offset += 8 # date
-            offset += len(self.readstring(buf[offset:])) + 1 # style string
-            size = int.from_bytes(buf[offset:offset+2], byteorder='big') # properties
-            offset += size + 2
+            style = self.readstring(buf[offset:]) # transport style
+            offset += len(style) + 1 # style string
+            size = int.from_bytes(buf[offset:offset+2], byteorder='big') # size of properties
+            offset += 2
+            if not self.yggdrasil and style == 'NTCP2': # possible yggdrasil?
+                r = offset
+                while r < size + offset:
+                    key = self.readstring(buf[r:])
+                    r += len(key) + 2 # length and =
+                    if key == 'host':
+                        value = self.readstring(buf[r:])
+                        firstcolon = value.find(':')
+                        if firstcolon > 0: # ipv6 address
+                            first = int(value[0:firstcolon], 16) # first segment of ipv6 address
+                            if first >= 0x0200 and first <= 0x03FF: # yggdrasil range
+                                self.yggdrasil = True
+                        break
+                    r += len(self.readstring(buf[r:])) + 2 # length and ;               
+            offset += size
         return offset
     
     def readproperties(self, buf):
@@ -56,4 +75,7 @@ class RouterInfo:
 
     def isvalid(self):
         return self.getversion() >= 959 and not self.hasinvalidcaps() # version >= 0.9.59 and no 'U', 'D', 'E' or 'G' caps
+
+    def isyggdrasil(self):
+        return self.yggdrasil
 
