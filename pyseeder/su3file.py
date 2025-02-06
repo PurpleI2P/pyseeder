@@ -6,6 +6,7 @@ import io
 from zipfile import ZipFile, ZIP_DEFLATED
 
 import pyseeder.crypto
+from pyseeder.routerinfo import RouterInfo
 from pyseeder.utils import PyseederException
 
 
@@ -62,30 +63,25 @@ class SU3File:
         dat_files = []
         dat_yggfiles = []
 
-        if yggseeds > 0:
-            import re
-            pattern = re.compile(b'host=.[23]..:')
-
         timelimit = time.time() - float(3600 * 10) # current time minus 10 hours
 
         for root, dirs, files in os.walk(netdb):
             for f in files:
                 if f.endswith(".dat"):
                     path = os.path.join(root, f)
-                    file_added = False
 
                     if os.path.getmtime(path) < timelimit: # modified time older than 10h
                         continue
 
-                    if yggseeds > 0:
-                        for line in open(path, "rb"):
-                            if pattern.search(line):
-                                dat_yggfiles.append(path)
-                                file_added = True
-                                break
-
-                    if not file_added:
-                        dat_files.append(path)
+                    ri = RouterInfo(path)
+                    if ri.isvalid():
+                        ygg_file_added = False
+                        if yggseeds > 0 and ri.isyggdrasil():
+                            dat_yggfiles.append(path)
+                            ygg_file_added = True
+      
+                        if not ygg_file_added:
+                            dat_files.append(path)
 
 
         if yggseeds > 0:
